@@ -6,6 +6,7 @@ def preprocess_data(df):
     Preprocess dataset:
     - Label encode categorical columns
     - Scale numerical columns
+    - Exclude Crop_Year (future-ready)
     """
     # Encode categorical columns
     label_cols = ["Crop", "Season", "State"]
@@ -14,9 +15,12 @@ def preprocess_data(df):
         le[col] = LabelEncoder()
         df[col] = le[col].fit_transform(df[col].astype(str))
 
-    # Split features & target
-    X = df.drop("Yield", axis=1)
+    # Select features (exclude Crop_Year)
+    features = ["Crop", "Season", "State", "Area", "Production", "Annual_Rainfall", "Fertilizer", "Pesticide"]
+    X = df[features]
     y = df["Yield"]
+
+    print("Model features:", X.columns.tolist())
 
     # Scale numerical columns
     scaler = StandardScaler()
