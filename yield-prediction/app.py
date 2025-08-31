@@ -17,15 +17,15 @@ scaler = joblib.load("models/scaler.pkl")
 
 app = FastAPI()
 
-# ✅ Add CORS middleware
 origins = [
-    "http://localhost:5173",   # React dev server
-    "http://127.0.0.1:5173",   # alternative
+    "http://localhost:5173",     # React dev server
+    "http://127.0.0.1:5173",     # alternative
+    "https://mini-project-psi-navy.vercel.app"  # deployed frontend
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,      # 👈 allow only frontend
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
