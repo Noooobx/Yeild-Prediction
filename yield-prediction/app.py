@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 import numpy as np
@@ -15,6 +16,20 @@ for key in ["State", "Season", "Crop"]:
 scaler = joblib.load("models/scaler.pkl")
 
 app = FastAPI()
+
+# ✅ Add CORS middleware
+origins = [
+    "http://localhost:5173",   # React dev server
+    "http://127.0.0.1:5173",   # alternative
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,      # 👈 allow only frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Define input schema with crop
 class CropInput(BaseModel):

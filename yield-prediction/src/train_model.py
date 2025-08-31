@@ -26,6 +26,6 @@ print("R2 Score:", r2_score(y_test, y_pred))
 
 # Save model & preprocessing objects
 joblib.dump(model, "../models/yield_model.pkl")
-joblib.dump(le, "../models/label_encoders.pkl")
+joblib.dump(le, "../mas iw as doing knowleodels/label_encoders.pkl")
 joblib.dump(scaler, "../models/scaler.pkl")
 print("✅ Model and encoders saved in /models/")
