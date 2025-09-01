@@ -42,7 +42,7 @@ class CropInput(BaseModel):
     fertilizer: float
     pesticide: float
 
-@app.get("/info")
+@app.get("/")
 def get_info():
     return {
         "crops": list(encoders["Crop"].classes_),
