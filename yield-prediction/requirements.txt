@@ -3,4 +3,4 @@ numpy
 scikit-learn
 flask
 fastapi
-uvicorn
+uvicorn[standard]

@@ -1,35 +1,29 @@
 import joblib
 import numpy as np
+from pathlib import Path
 
-# Load saved components
-model = joblib.load("../models/yield_model.pkl")
-le = joblib.load("../models/label_encoders.pkl")
-scaler = joblib.load("../models/scaler.pkl")
+# Paths
+MODEL_PATH = Path("../models/yield_model.pkl")
 
-def safe_transform(le, column, value):
-    """Safely transform categorical values using a fitted LabelEncoder"""
-    if value in le[column].classes_:
-        return le[column].transform([value])[0]
-    else:
-        print(f"⚠️ Warning: '{value}' not seen in training for column '{column}'. Defaulting to first class.")
-        return le[column].transform([le[column].classes_[0]])[0]
+# Load full pipeline (preprocessor + model)
+model = joblib.load(MODEL_PATH)
 
 def predict_yield(crop, season, state, area, production, rainfall, fertilizer, pesticide):
-    # Encode categorical features safely
-    crop_encoded = safe_transform(le, "Crop", crop)
-    season_encoded = safe_transform(le, "Season", season)
-    state_encoded = safe_transform(le, "State", state)
-
     # Feature vector in same order as training
-    features = np.array([[crop_encoded, season_encoded, state_encoded,
-                          area, production, rainfall, fertilizer, pesticide]])
-
-    # Scale features
-    features_scaled = scaler.transform(features)
+    features = np.array([{
+        "Crop": crop,
+        "Season": season,
+        "State": state,
+        "Area": area,
+        "Production": production,
+        "Annual_Rainfall": rainfall,
+        "Fertilizer": fertilizer,
+        "Pesticide": pesticide
+    }])
 
     # Predict
-    prediction = model.predict(features_scaled)
-    return prediction[0]
+    prediction = model.predict(features)[0]
+    return float(prediction)
 
 # Example run
 if __name__ == "__main__":
